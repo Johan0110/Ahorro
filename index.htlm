@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reto de Ahorro - $1.000.000</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .progress-container {
+      background: #ddd;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 20px 0;
+      height: 25px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #4caf50;
+      text-align: center;
+      color: white;
+      font-size: 14px;
+      line-height: 25px;
+      transition: width 0.3s;
+    }
+
+    .summary {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 10px;
+    }
+
+    .cell {
+      background: white;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      font-size: 14px;
+    }
+
+    .cell.checked {
+      background: #4caf50;
+      color: white;
+      border-color: #4caf50;
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+
+<h1>💰 Reto de Ahorro $1.000.000</h1>
+
+<div class="summary">
+  Total ahorrado: <strong>$<span id="total">0</span></strong> / $1.000.000
+</div>
+
+<div class="progress-container">
+  <div class="progress-bar" id="progress">0%</div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+  const TOTAL_GOAL = 1000000;
+  const DAYS = 365;
+  const VALUE_PER_DAY = Math.round(TOTAL_GOAL / DAYS);
+
+  const grid = document.getElementById("grid");
+  const totalSpan = document.getElementById("total");
+  const progressBar = document.getElementById("progress");
+
+  let checkedCount = 0;
+
+  function updateUI() {
+    const total = checkedCount * VALUE_PER_DAY;
+    const percent = Math.min((total / TOTAL_GOAL) * 100, 100);
+
+    totalSpan.textContent = total.toLocaleString("es-CO");
+    progressBar.style.width = percent + "%";
+    progressBar.textContent = Math.floor(percent) + "%";
+  }
+
+  for (let i = 1; i <= DAYS; i++) {
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.textContent = `$${VALUE_PER_DAY.toLocaleString("es-CO")}`;
+
+    cell.addEventListener("click", () => {
+      cell.classList.toggle("checked");
+      checkedCount += cell.classList.contains("checked") ? 1 : -1;
+      updateUI();
+    });
+
+    grid.appendChild(cell);
+  }
+</script>
+
+</body>
+</html>
