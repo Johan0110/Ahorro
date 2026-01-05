@@ -1,117 +1,218 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Ahorro </title>
+  <meta charset="UTF-8">
+  <title>Reto de Ahorro $1.000.000</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
+    :root {
+      --bg: linear-gradient(135deg, #43cea2, #185a9d);
+      --card: #ffffff;
+      --text: #0f172a;
+      --cell: #f1f5f9;
+    }
+
+    body.dark {
+      --bg: linear-gradient(135deg, #141e30, #243b55);
+      --card: #1e293b;
+      --text: #f8fafc;
+      --cell: #334155;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 20px;
+      color: var(--text);
+    }
+
+    .card {
+      background: var(--card);
+      width: 100%;
+      max-width: 1100px;
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
     }
 
     h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    button {
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .summary {
       text-align: center;
+      font-size: 18px;
+      margin-bottom: 10px;
     }
 
     .progress-container {
-      background: #ddd;
-      border-radius: 20px;
+      background: #cbd5e1;
+      border-radius: 30px;
+      height: 28px;
       overflow: hidden;
-      margin: 20px 0;
-      height: 25px;
+      margin-bottom: 20px;
     }
 
     .progress-bar {
       height: 100%;
       width: 0%;
-      background: #4caf50;
+      background: linear-gradient(90deg, #43cea2, #185a9d);
+      color: #fff;
+      font-weight: bold;
       text-align: center;
-      color: white;
+      line-height: 28px;
+      transition: width 0.4s;
       font-size: 14px;
-      line-height: 25px;
-      transition: width 0.3s;
-    }
-
-    .summary {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 18px;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 12px;
     }
 
     .cell {
-      background: white;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      padding: 10px;
+      background: var(--cell);
+      border-radius: 14px;
+      padding: 15px 5px;
       text-align: center;
       cursor: pointer;
+      font-weight: 600;
+      transition: all 0.25s ease;
       user-select: none;
-      font-size: 14px;
+    }
+
+    .cell:hover {
+      transform: translateY(-3px);
     }
 
     .cell.checked {
-      background: #4caf50;
+      background: linear-gradient(135deg, #43cea2, #185a9d);
       color: white;
-      border-color: #4caf50;
       text-decoration: line-through;
     }
   </style>
 </head>
 <body>
 
-<h1>💰 Reto de Ahorro $1.000.000</h1>
+<div class="card">
+  <div class="top-bar">
+    <h1>💰 Reto de Ahorro</h1>
+    <button id="toggleDark">🌙</button>
+  </div>
 
-<div class="summary">
-  Total ahorrado: <strong>$<span id="total">0</span></strong> / $1.000.000
+  <div class="summary">
+    Total ahorrado: <strong>$<span id="total">0</span></strong> / $1.000.000
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progress">0%</div>
+  </div>
+
+  <div class="grid" id="grid"></div>
 </div>
-
-<div class="progress-container">
-  <div class="progress-bar" id="progress">0%</div>
-</div>
-
-<div class="grid" id="grid"></div>
 
 <script>
-  const TOTAL_GOAL = 1000000;
+  const GOAL = 1000000;
   const DAYS = 365;
-  const VALUE_PER_DAY = Math.round(TOTAL_GOAL / DAYS);
+  const MIN = 500;
+  const MAX = 5000;
+  const STEP = 500;
 
   const grid = document.getElementById("grid");
   const totalSpan = document.getElementById("total");
   const progressBar = document.getElementById("progress");
+  const toggleDark = document.getElementById("toggleDark");
 
-  let checkedCount = 0;
+  let values = JSON.parse(localStorage.getItem("values"));
+  let checked = JSON.parse(localStorage.getItem("checked")) || Array(DAYS).fill(false);
+  let darkMode = localStorage.getItem("dark") === "true";
+
+  if (darkMode) document.body.classList.add("dark");
+
+  toggleDark.onclick = () => {
+    document.body.classList.toggle("dark");
+    localStorage.setItem("dark", document.body.classList.contains("dark"));
+  };
+
+  if (!values) {
+    values = [];
+    let total = 0;
+
+    for (let i = 0; i < DAYS; i++) {
+      const steps = (MAX - MIN) / STEP;
+      const value = MIN + Math.floor(Math.random() * (steps + 1)) * STEP;
+      values.push(value);
+      total += value;
+    }
+
+    let diff = GOAL - total;
+    let i = 0;
+
+    while (diff !== 0) {
+      const step = diff > 0 ? STEP : -STEP;
+      if (values[i] + step >= MIN && values[i] + step <= MAX) {
+        values[i] += step;
+        diff -= step;
+      }
+      i = (i + 1) % DAYS;
+    }
+
+    localStorage.setItem("values", JSON.stringify(values));
+  }
 
   function updateUI() {
-    const total = checkedCount * VALUE_PER_DAY;
-    const percent = Math.min((total / TOTAL_GOAL) * 100, 100);
+    let total = 0;
+    checked.forEach((v, i) => v && (total += values[i]));
 
+    const percent = Math.min((total / GOAL) * 100, 100);
     totalSpan.textContent = total.toLocaleString("es-CO");
     progressBar.style.width = percent + "%";
     progressBar.textContent = Math.floor(percent) + "%";
+
+    localStorage.setItem("checked", JSON.stringify(checked));
   }
 
-  for (let i = 1; i <= DAYS; i++) {
+  values.forEach((value, i) => {
     const cell = document.createElement("div");
     cell.className = "cell";
-    cell.textContent = `$${VALUE_PER_DAY.toLocaleString("es-CO")}`;
+    cell.textContent = `$${value.toLocaleString("es-CO")}`;
+    if (checked[i]) cell.classList.add("checked");
 
-    cell.addEventListener("click", () => {
+    cell.onclick = () => {
+      checked[i] = !checked[i];
       cell.classList.toggle("checked");
-      checkedCount += cell.classList.contains("checked") ? 1 : -1;
       updateUI();
-    });
+    };
 
     grid.appendChild(cell);
-  }
+  });
+
+  updateUI();
 </script>
 
 </body>
 </html>
+
