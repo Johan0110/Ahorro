@@ -1,283 +1,120 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Reto de Ahorro $1.000.000</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti 💖</title>
+    <style>
+        body {
+            background-color: #0f0f0f;
+            color: #ff3366;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
 
-  <style>
-    :root {
-      --bg: linear-gradient(135deg, #43cea2, #185a9d);
-      --card: #ffffff;
-      --text: #0f172a;
-      --cell: #f1f5f9;
-      --chip: #e2e8f0;
-    }
+        h1 {
+            color: #ff69b4;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff69b4;
+        }
 
-    body.dark {
-      --bg: linear-gradient(135deg, #141e30, #243b55);
-      --card: #1e293b;
-      --text: #f8fafc;
-      --cell: #334155;
-      --chip: #475569;
-    }
+        .corazon {
+            color: #ff0055;
+            font-size: 1.2rem;
+            line-height: 1.2;
+            white-space: pre;
+            margin-bottom: 30px;
+            text-shadow: 0 0 8px #ff0055;
+        }
 
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: var(--bg);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      color: var(--text);
-    }
+        .lista-te-amo {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
 
-    .card {
-      background: var(--card);
-      width: 100%;
-      max-width: 1100px;
-      border-radius: 20px;
-      padding: 25px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    }
+        .linea {
+            font-size: 1.1rem;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: aparecer 0.3s forwards;
+        }
 
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
+        .rosa { color: #ff69b4; text-shadow: 0 0 5px #ff69b4; }
+        .rojo { color: #ff0055; text-shadow: 0 0 5px #ff0055; }
 
-    button {
-      border: none;
-      padding: 8px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 600;
-    }
+        @keyframes aparecer {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    h1 {
-      margin: 0;
-    }
-
-    .summary {
-      text-align: center;
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-
-    .progress-container {
-      background: #cbd5e1;
-      border-radius: 30px;
-      height: 28px;
-      overflow: hidden;
-      margin-bottom: 15px;
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #43cea2, #185a9d);
-      color: white;
-      font-weight: bold;
-      text-align: center;
-      line-height: 28px;
-      transition: width 0.4s;
-    }
-
-    /* 🔢 CATEGORÍAS */
-    .categories {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .chip {
-      background: var(--chip);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      user-select: none;
-      transition: 0.2s;
-    }
-
-    .chip.active {
-      background: linear-gradient(135deg, #43cea2, #185a9d);
-      color: white;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-      gap: 12px;
-    }
-
-    .cell {
-      background: var(--cell);
-      border-radius: 14px;
-      padding: 15px 5px;
-      text-align: center;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.25s;
-      user-select: none;
-    }
-
-    .cell.checked {
-      background: linear-gradient(135deg, #43cea2, #185a9d);
-      color: white;
-      text-decoration: line-through;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
+        .final {
+            margin-top: 30px;
+            font-size: 1.3rem;
+            color: #e600e6;
+            text-shadow: 0 0 10px #e600e6;
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-<div class="card">
-  <div class="top-bar">
-    <h1>💰 Reto de Ahorro</h1>
-    <button id="toggleDark">🌙</button>
-  </div>
+    <h1>💖 INICIANDO DEMOSTRACIÓN DE AFECTO 💖</h1>
 
-  <div class="summary">
-    Total ahorrado: <strong>$<span id="total">0</span></strong> / $1.000.000
-  </div>
+    <div class="corazon" id="corazon"></div>
+    <div class="lista-te-amo" id="contenedor"></div>
+    <div class="final" id="mensaje-final">✨ ¡1000 veces 'Te amo' completadas con éxito! ✨</div>
 
-  <div class="progress-container">
-    <div class="progress-bar" id="progress">0%</div>
-  </div>
+    <script>
+        // Dibujar corazón
+        const corazonASCII = [
+            "  ❤❤   ❤❤  ",
+            " ❤❤❤❤ ❤❤❤❤ ",
+            "❤❤❤❤❤❤❤❤❤❤❤",
+            " ❤❤❤❤❤❤❤❤❤ ",
+            "   ❤❤❤❤❤❤   ",
+            "     ❤❤     "
+        ];
+        document.getElementById('corazon').innerText = corazonASCII.join('\n');
 
-  <!-- 🔢 CATEGORÍAS -->
-  <div class="categories" id="categories"></div>
+        // Generar las 1000 líneas
+        const contenedor = document.getElementById('contenedor');
+        const mensajeFinal = document.getElementById('mensaje-final');
+        let contador = 1;
 
-  <div class="grid" id="grid"></div>
-</div>
+        function agregarLinea() {
+            if (contador <= 1000) {
+                const div = document.createElement('div');
+                div.className = `linea ${contador % 2 === 0 ? 'rosa' : 'rojo'}`;
+                div.innerText = "❤ Te amo ❤";
+                contenedor.appendChild(div);
+                
+                // Hace scroll automático hacia abajo
+                window.scrollTo(0, document.body.scrollHeight);
+                
+                contador++;
+                setTimeout(agregarLinea, 10); // Velocidad de aparición
+            } else {
+                mensajeFinal.style.display = 'block';
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        }
 
-<script>
-  const GOAL = 1000000;
-  const DAYS = 365;
-  const MIN = 500;
-  const MAX = 5000;
-  const STEP = 500;
-
-  const grid = document.getElementById("grid");
-  const totalSpan = document.getElementById("total");
-  const progressBar = document.getElementById("progress");
-  const toggleDark = document.getElementById("toggleDark");
-  const categoriesDiv = document.getElementById("categories");
-
-  let values = JSON.parse(localStorage.getItem("values"));
-  let checked = JSON.parse(localStorage.getItem("checked")) || Array(DAYS).fill(false);
-  let darkMode = localStorage.getItem("dark") === "true";
-  let activeFilter = null;
-  let cells = [];
-
-  if (darkMode) document.body.classList.add("dark");
-
-  toggleDark.onclick = () => {
-    document.body.classList.toggle("dark");
-    localStorage.setItem("dark", document.body.classList.contains("dark"));
-  };
-
-  // Generar valores si no existen
-  if (!values) {
-    values = [];
-    let total = 0;
-
-    for (let i = 0; i < DAYS; i++) {
-      const steps = (MAX - MIN) / STEP;
-      const v = MIN + Math.floor(Math.random() * (steps + 1)) * STEP;
-      values.push(v);
-      total += v;
-    }
-
-    let diff = GOAL - total;
-    let i = 0;
-    while (diff !== 0) {
-      const s = diff > 0 ? STEP : -STEP;
-      if (values[i] + s >= MIN && values[i] + s <= MAX) {
-        values[i] += s;
-        diff -= s;
-      }
-      i = (i + 1) % DAYS;
-    }
-
-    localStorage.setItem("values", JSON.stringify(values));
-  }
-
-  // 🔢 Crear categorías
-  for (let v = MIN; v <= MAX; v += STEP) {
-    const chip = document.createElement("div");
-    chip.className = "chip";
-    chip.textContent = `$${v.toLocaleString("es-CO")}`;
-
-    chip.onclick = () => {
-      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-      chip.classList.add("active");
-      activeFilter = v;
-      applyFilter();
-    };
-
-    categoriesDiv.appendChild(chip);
-  }
-
-  function clearFilter() {
-    activeFilter = null;
-    document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    applyFilter();
-  }
-
-  function applyFilter() {
-    cells.forEach((cell, i) => {
-      if (activeFilter === null || values[i] === activeFilter) {
-        cell.classList.remove("hidden");
-      } else {
-        cell.classList.add("hidden");
-      }
-    });
-  }
-
-  function updateUI() {
-    let total = 0;
-    checked.forEach((v, i) => v && (total += values[i]));
-    const percent = Math.min((total / GOAL) * 100, 100);
-
-    totalSpan.textContent = total.toLocaleString("es-CO");
-    progressBar.style.width = percent + "%";
-    progressBar.textContent = Math.floor(percent) + "%";
-
-    localStorage.setItem("checked", JSON.stringify(checked));
-  }
-
-  // Crear celdas
-  values.forEach((value, i) => {
-    const cell = document.createElement("div");
-    cell.className = "cell";
-    cell.textContent = `$${value.toLocaleString("es-CO")}`;
-    if (checked[i]) cell.classList.add("checked");
-
-    cell.onclick = () => {
-      checked[i] = !checked[i];
-      cell.classList.toggle("checked");
-      updateUI();
-      clearFilter(); // 🔥 vuelve a la tabla normal
-    };
-
-    cells.push(cell);
-    grid.appendChild(cell);
-  });
-
-  updateUI();
-</script>
-
+        setTimeout(agregarLinea, 1000);
+    </script>
 </body>
 </html>
-
